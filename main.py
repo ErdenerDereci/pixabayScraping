@@ -1,8 +1,11 @@
 from selenium import webdriver
 from urlextract import URLExtract
 import time
-
+import urllib.request
+import numpy as np
+from tqdm import tqdm
 from bs4 import BeautifulSoup
+sleeps = [1,0.5,1.5,0.7]
 imagelist = set([])
 DRIVER_PATH = "C:\\Users\\x\\Desktop\\chromedriver"
 driver = webdriver.Chrome(executable_path=DRIVER_PATH)
@@ -32,7 +35,15 @@ def downloadImages(page):
         print(len(imagelist))
         time.sleep(3)
 
-downloadImages(3)
+downloadImages(10)
+for i, link in enumerate(tqdm(imagelist)):
+    if link is not None:
+        name = "orchidFlower" + f'{i}.jpeg'
+        opener = urllib.request.URLopener()
+        opener.addheader('User-Agent', 'whatever')
+        filename, headers = opener.retrieve(link, name)
+        time.sleep(np.random.choice(sleeps))
+
 driver.quit()
 
 
